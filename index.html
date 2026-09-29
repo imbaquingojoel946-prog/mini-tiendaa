@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Tienda - Proyecto Escolar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans 3', Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #dbeafe 0%, #e0f2fe 30%, #d1fae5 70%, #fef3c7 100%);
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 25px 12px 90px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            line-height: 1.55;
+        }
+
+        #portada {
+            position: relative;
+        }
+
+        .logo-esquina {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 12%;
+            height: 12%;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        #portada .institucion {
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 18px;
+            margin-top: 0;
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .contenedor {
+            background: #ffffff;
+            border: none;
+            border-radius: 18px;
+            padding: 28px 28px 36px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 12px 40px rgba(30, 64, 175, 0.15);
+            position: relative;
+        }
+
+        /* ===== MENÚ DE NAVEGACIÓN (ABAJO) ===== */
+        .menu-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+            background: linear-gradient(90deg, #1e40af, #2563eb, #0d9488);
+            padding: 14px;
+            border-radius: 14px;
+            border: none;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .menu-nav button {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1e3a8a;
+            border: 2px solid transparent;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Source Sans 3', sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .menu-nav button:hover:not(:disabled) {
+            background: #fef3c7;
+            border-color: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(245, 158, 11, 0.3);
+            color: #92400e;
+        }
+
+        .menu-nav button.activo {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            color: #1e293b;
+            border-color: #d97706;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+        }
+
+        .menu-nav button:disabled {
+            background: rgba(255,255,255,0.4);
+            color: #94a3b8;
+            cursor: not-allowed;
+            border-color: transparent;
+            box-shadow: none;
+        }
+
+        /* ===== SECCIONES ===== */
+        .seccion {
+            display: none;
+            animation: aparecer 0.35s ease;
+        }
+
+        .seccion.activa {
+            display: block;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            text-align: center;
+            font-size: 2rem;
+            color: #1e3a8a;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        /* ===== PORTADA ===== */
+        #portada h1 {
+            font-size: 2.6rem;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #1e3a8a, #2563eb, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        #portada .subtitulo {
+            font-size: 1.15rem;
+            color: #0d9488;
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        #portada .grupo {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #b45309;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 10px 20px;
+            margin: 0 auto 22px;
+            display: inline-block;
+            width: 100%;
+            max-width: 280px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+        }
+
+        #portada .info {
+            background: linear-gradient(135deg, #eff6ff 0%, #ecfdf5 50%, #fefce8 100%);
+            border: 2px solid #60a5fa;
+            border-radius: 14px;
+            padding: 26px 28px;
+            margin-bottom: 18px;
+            text-align: left;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        #portada .info p {
+            margin: 11px 0;
+            font-size: 1.02rem;
+            color: #1e293b;
+        }
+
+        #portada .info strong {
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        #portada .info .proyecto {
+            font-size: 1.1rem;
+            color: #0f766e;
+            font-weight: 700;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 2px dashed #5eead4;
+        }
+
+        .integrantes-fotos {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .integrante {
+            text-align: center;
+            transition: transform 0.25s ease;
+        }
+
+        .integrante:hover {
+            transform: scale(1.05);
+        }
+
+        .integrante img {
+            width: 95px;
+            height: 95px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 3px solid #2563eb;
+            box-shadow: 0 5px 14px rgba(37, 99, 235, 0.25);
+            margin-bottom: 8px;
+        }
+
+        .integrante p {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin: 0;
+        }
+
+        /* ===== INDICACIONES ===== */
+        #indicaciones h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: #1e3a8a;
+            text-align: center;
+            font-size: 1.85rem;
+            margin-bottom: 22px;
+        }
+
+        .indicacion-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #ecfdf5 100%);
+            border: 1px solid #bae6fd;
+            border-left: 6px solid #2563eb;
+            border-radius: 12px;
+            padding: 22px 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .indicacion-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.12);
+        }
+
+        .indicacion-box h3 {
+            color: #1e40af;
+            font-size: 1.15rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pasos {
+            list-style: none;
+            padding: 0;
+            counter-reset: paso;
+        }
+
+        .pasos li {
+            position: relative;
+            padding: 14px 16px 14px 56px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            border-radius: 10px;
+            border: 1px solid #e0f2fe;
+            font-size: 1.02rem;
+            color: #1e293b;
+            line-height: 1.5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        .pasos li::before {
+            counter-increment: paso;
+            content: counter(paso);
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #2563eb, #0d9488);
+            color: white;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .pasos li strong {
+            color: #1e3a8a;
+        }
+
+        /* ===== PREGUNTAS ===== */
+        #preguntas h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: #1e3a8a;
+            text-align: center;
+            font-size: 1.85rem;
+            margin-bottom: 8px;
+        }
+
+        #instruccion {
+            text-align: center;
+            color: #1e40af;
+            margin-bottom: 22px;
+            font-size: 1.02rem;
+            background: linear-gradient(135deg, #dbeafe, #e0f2fe);
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid #93c5fd;
+        }
+
+        .pregunta-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+            border: 1px solid #bfdbfe;
+            padding: 26px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+        }
+
+        .pregunta {
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .obligatoria {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .opcional {
+            background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .opcion {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 14px 18px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+        }
+
+        .opcion:hover {
+            border-color: #2563eb;
+            background: #eff6ff;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
+        }
+
+        .opcion input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        .opcion label {
+            cursor: pointer;
+            font-size: 1.02rem;
+            color: #1e293b;
+            flex: 1;
+        }
+
+        .opcion.seleccionada {
+            border-color: #2563eb;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            box-shadow: 0 3px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #1e40af, #2563eb);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Source Sans 3', sans-serif;
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .mensaje {
+            margin-top: 14px;
+            font-weight: 600;
+            min-height: 24px;
+            font-size: 1.05rem;
+        }
+
+        .correcto {
+            color: #065f46;
+        }
+
+        .incorrecto {
+            color: #991b1b;
+        }
+
+        /* ===== TIENDA ===== */
+        #tienda h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            color: #0f766e;
+            text-align: center;
+            font-size: 1.7rem;
+            margin-bottom: 16px;
+        }
+
+        .saldo-box {
+            text-align: center;
+            background: linear-gradient(135deg, #dbeafe, #93c5fd);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+        }
+
+        .info-opcional {
+            background: linear-gradient(135deg, #ecfdf5, #a7f3d0);
+            border: 1px solid #6ee7b7;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-size: 0.98rem;
+            color: #065f46;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .oculto {
+            display: none !important;
+        }
+
+        .seccion-titulo {
+            font-size: 1.15rem;
+            color: #1e3a8a;
+            margin: 22px 0 14px;
+            font-weight: 700;
+        }
+
+        .productos {
+            display: grid;
+            gap: 14px;
+        }
+
+        .producto {
+            background: linear-gradient(135deg, #f8fafc, #f0f9ff);
+            border: 1px solid #e0f2fe;
+            padding: 14px 16px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.22s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+            gap: 14px;
+        }
+
+        .producto:hover {
+            background: #eff6ff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .producto.bloqueado {
+            opacity: 0.6;
+            background: #f1f5f9;
+        }
+
+        .producto-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .producto img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .producto strong {
+            font-size: 1.08rem;
+            color: #0f172a;
+        }
+
+        .producto span {
+            color: #475569;
+            font-size: 0.98rem;
+            font-weight: 600;
+        }
+
+        .producto .categoria {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .producto .stock {
+            font-size: 0.85rem;
+            color: #1e40af;
+            margin-top: 3px;
+            font-weight: 500;
+        }
+
+        .producto .stock.agotado {
+            color: #991b1b;
+            font-weight: 700;
+        }
+
+        .producto button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .bloqueado-texto {
+            font-size: 0.82rem;
+            color: #991b1b;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Seleccionados */
+        .seleccionados {
+            margin-top: 26px;
+            background: linear-gradient(135deg, #fffbeb, #fef3c7);
+            border: 2px solid #fbbf24;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+        }
+
+        .seleccionados h3 {
+            margin-bottom: 14px;
+            color: #b45309;
+            font-size: 1.2rem;
+        }
+
+        #lista-seleccionados {
+            list-style: none;
+            margin-bottom: 14px;
+        }
+
+        #lista-seleccionados li {
+            padding: 10px 0;
+            border-bottom: 1px solid #fde68a;
+            color: #1e293b;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #lista-seleccionados li:last-child {
+            border-bottom: none;
+        }
+
+        .btn-quitar {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            padding: 5px 12px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+        }
+
+        .btn-quitar:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+        }
+
+        #btn-comprar {
+            background: linear-gradient(135deg, #0f766e, #14b8a6);
+            width: 100%;
+            padding: 14px;
+            font-size: 1.08rem;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3);
+        }
+
+        #btn-comprar:hover:not(:disabled) {
+            background: linear-gradient(135deg, #0d9488, #0f766e);
+        }
+
+        .mensaje-compra {
+            margin-top: 14px;
+            font-weight: 600;
+            text-align: center;
+            min-height: 24px;
+            font-size: 1.05rem;
+        }
+
+        .carrito {
+            margin-top: 28px;
+            background: linear-gradient(135deg, #f8fafc, #f0f9ff);
+            border: 1px solid #e0f2fe;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+        }
+
+        .carrito h3 {
+            margin-bottom: 14px;
+            color: #1e3a8a;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        #lista-carrito {
+            list-style: none;
+        }
+
+        #lista-carrito li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #1e293b;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #lista-carrito li:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 16px;
+            color: #0f766e;
+            padding-top: 12px;
+            border-top: 2px solid #a7f3d0;
+        }
+
+        #mensaje-final-opcional {
+            display: none;
+            background: linear-gradient(135deg, #ecfdf5, #a7f3d0);
+            border: 2px solid #34d399;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 18px;
+            font-size: 1rem;
+            color: #065f46;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .contador-preguntas {
+            text-align: center;
+            color: #475569;
+            font-size: 0.98rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <!-- ========== PORTADA ========== -->
+        <div id="portada" class="seccion activa">
+            <img src="sfq.jpg" alt="Logo SFQ" class="logo-esquina">
+
+            <div class="institucion">
+                UNIDAD EDUCATIVA MUNICIPAL TÉCNICA Y EN CIENCIAS<br>"SAN FRANCISCO DE QUITO"
+            </div>
+
+            <h1>Mini Tienda</h1>
+            <div class="subtitulo">Presentación de nuestra página web</div>
+            
+            <div style="text-align:center;">
+                <div class="grupo">Grupo Número 4</div>
+            </div>
+
+            <div class="info">
+                <p><strong>Tema:</strong> Mini Tienda</p>
+                <p><strong>Curso:</strong> Tercero BTA</p>
+                <p><strong>Año lectivo:</strong> 2026-2027</p>
+                <p class="proyecto"><strong>Proyecto Intermodular</strong></p>
+                <p><strong>Integrantes:</strong></p>
+
+                <div class="integrantes-fotos">
+                    <div class="integrante">
+                        <img src="joelsito.jpg" alt="Joel Imaquingo">
+                        <p>Joel Imaquingo</p>
+                    </div>
+                    <div class="integrante">
+                        <img src="paulsito.jpg" alt="Paul Flores">
+                        <p>Paul Flores</p>
+                    </div>
+                    <div class="integrante">
+                        <img src="wuilo.jpg" alt="William Garcés">
+                        <p>William Garcés</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== INDICACIONES ========== -->
+        <div id="indicaciones" class="seccion">
+            <h2>Indicaciones</h2>
+
+            <div class="indicacion-box">
+                <h3>¿Cómo funciona?</h3>
+                <ol class="pasos">
+                    <li>
+                        Responder las <strong>diez preguntas</strong>. Cinco de ellas son <strong>opcionales</strong> y cinco de ellas son <strong>obligatorias</strong>.
+                    </li>
+                    <li>
+                        Si respondemos las <strong>cinco preguntas obligatorias</strong> se desbloqueará la tienda.
+                    </li>
+                    <li>
+                        Si hacemos las <strong>cinco preguntas opcionales</strong> obtendremos más dinero y podremos ir desbloqueando nuevas compras para la Mini Tienda.
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- ========== PREGUNTAS ========== -->
+        <div id="preguntas" class="seccion">
+            <h2>Preguntas</h2>
+            <p id="instruccion">Responde las 5 preguntas obligatorias de opción múltiple para desbloquear la tienda y ganar $300</p>
+
+            <div id="zona-preguntas">
+                <div class="pregunta-box">
+                    <div id="etiqueta-pregunta" class="etiqueta obligatoria">OBLIGATORIA</div>
+                    <div class="pregunta" id="texto-pregunta">Cargando pregunta...</div>
+                    
+                    <div class="opciones" id="opciones-container">
+                        <!-- Las opciones se generan con JavaScript -->
+                    </div>
+
+                    <button onclick="comprobarRespuesta()">Comprobar</button>
+                    <div class="mensaje" id="mensaje"></div>
+                </div>
+                <p class="contador-preguntas">
+                    Pregunta <span id="numero-pregunta">1</span> de <span id="total-preguntas">5</span>
+                    <span id="tipo-pregunta-texto">(Obligatorias)</span>
+                </p>
+            </div>
+
+            <!-- Zona de preguntas opcionales -->
+            <div id="zona-opcionales" class="oculto">
+                <div class="seccion-titulo">Preguntas Opcionales (+$30 cada una)</div>
+
+                <div id="caja-pregunta-opcional" class="pregunta-box">
+                    <div class="etiqueta opcional">OPCIONAL</div>
+                    <div class="pregunta" id="texto-opcional">Cargando...</div>
+                    
+                    <div class="opciones" id="opciones-opcional">
+                        <!-- Opciones generadas con JS -->
+                    </div>
+
+                    <button onclick="comprobarOpcional()">Comprobar</button>
+                    <div class="mensaje" id="mensaje-opcional"></div>
+                </div>
+
+                <p id="contador-opcional" class="contador-preguntas">
+                    Opcional <span id="numero-opcional">1</span> de 5
+                </p>
+
+                <div id="mensaje-final-opcional">
+                    ¡Has completado todas las preguntas opcionales! Todos los productos están desbloqueados y recibiste dinero extra.
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== MINI TIENDA ========== -->
+        <div id="tienda" class="seccion">
+            <h2>¡Tienda desbloqueada!</h2>
+            
+            <div class="saldo-box">
+                Tu saldo: $<span id="saldo">300</span>
+            </div>
+
+            <div class="info-opcional" id="info-opcional">
+                Responde las preguntas opcionales (en la sección Preguntas) para ganar +$30 por cada una y desbloquear más productos
+            </div>
+
+            <div class="seccion-titulo"> Productos disponibles</div>
+            <div class="productos" id="lista-productos"></div>
+
+            <!-- Lista de productos seleccionados -->
+            <div class="seleccionados" id="zona-seleccionados">
+                <h3>Productos seleccionados</h3>
+                <ul id="lista-seleccionados">
+                    <li style="color:#64748b;">Ningún producto seleccionado</li>
+                </ul>
+                <button id="btn-comprar" onclick="comprarSeleccionados()" disabled>Comprar</button>
+                <div class="mensaje-compra" id="mensaje-compra"></div>
+            </div>
+
+            <div class="carrito">
+                <h3>Tu carrito</h3>
+                <ul id="lista-carrito"></ul>
+                <div class="total">Total gastado: $<span id="total">0</span></div>
+            </div>
+        </div>
+
+        <!-- MENÚ DE NAVEGACIÓN (ABAJO) -->
+        <nav class="menu-nav">
+            <button id="btn-portada" class="activo" onclick="mostrarSeccion('portada')">Portada</button>
+            <button id="btn-indicaciones" onclick="mostrarSeccion('indicaciones')">Indicaciones</button>
+            <button id="btn-preguntas" onclick="mostrarSeccion('preguntas')">Preguntas</button>
+            <button id="btn-tienda" onclick="mostrarSeccion('tienda')" disabled>Mini Tienda</button>
+        </nav>
+    </div>
+
+    <script>
+        // ===== DATOS =====
+        const preguntas = [
+            {
+                texto: "¿Qué significa HTML?",
+                opciones: [
+                    { letra: "A", texto: "HyperText Markup Language" },
+                    { letra: "B", texto: "High Text Machine Learning" },
+                    { letra: "C", texto: "Hyperlink Text Main Language" }
+                ],
+                correcta: "A",
+                obligatoria: true
+            },
+            {
+                texto: "¿Para qué sirve HTML?",
+                opciones: [
+                    { letra: "A", texto: "Para dar estilo a una página web" },
+                    { letra: "B", texto: "Para la estructura de una pagina web" },
+                    { letra: "C", texto: "Para programar la lógica del sitio" }
+                ],
+                correcta: "B",
+                obligatoria: true
+            },
+            {
+                texto: "¿Qué etiqueta se usa para crear un título?",
+                opciones: [
+                    { letra: "A", texto: "<title>" },
+                    { letra: "B", texto: "<h1>" },
+                    { letra: "C", texto: "<header>" }
+                ],
+                correcta: "B",
+                obligatoria: true
+            },
+            {
+                texto: "¿Qué etiqueta se usa para crear un párrafo?",
+                opciones: [
+                    { letra: "A", texto: "<parrafo>" },
+                    { letra: "B", texto: "<p>" },
+                    { letra: "C", texto: "<text>" }
+                ],
+                correcta: "B",
+                obligatoria: true
+            },
+            {
+                texto: "¿Qué etiqueta se usa para insertar una imagen?",
+                opciones: [
+                    { letra: "A", texto: "<image>" },
+                    { letra: "B", texto: "<img>" },
+                    { letra: "C", texto: "<pic>" }
+                ],
+                correcta: "B",
+                obligatoria: true
+            },
+            // Opcionales
+            {
+                texto: "¿Para qué sirve CSS?",
+                opciones: [
+                    { letra: "A", texto: "Para la estructura de la página" },
+                    { letra: "B", texto: "Para dar estilo a una página web." },
+                    { letra: "C", texto: "Para manejar bases de datos" }
+                ],
+                correcta: "B",
+                obligatoria: false
+            },
+            {
+                texto: "¿Qué propiedad CSS cambia el color del texto?",
+                opciones: [
+                    { letra: "A", texto: "text-color" },
+                    { letra: "B", texto: "color" },
+                    { letra: "C", texto: "font-color" }
+                ],
+                correcta: "B",
+                obligatoria: false
+            },
+            {
+                texto: "¿Qué propiedad CSS cambia el tamaño del texto?",
+                opciones: [
+                    { letra: "A", texto: "text-size" },
+                    { letra: "B", texto: "font-size" },
+                    { letra: "C", texto: "size" }
+                ],
+                correcta: "B",
+                obligatoria: false
+            },
+            {
+                texto: "¿Qué propiedad CSS cambia el color de fondo?",
+                opciones: [
+                    { letra: "A", texto: "background" },
+                    { letra: "B", texto: "background-color" },
+                    { letra: "C", texto: "bg-color" }
+                ],
+                correcta: "B",
+                obligatoria: false
+            },
+            {
+                texto: "¿Qué etiqueta se usa para crear un enlace?",
+                opciones: [
+                    { letra: "A", texto: "<link>" },
+                    { letra: "B", texto: "<a>" },
+                    { letra: "C", texto: "<href>" }
+                ],
+                correcta: "B",
+                obligatoria: false
+            }
+        ];
+
+        const productos = [
+            { id: 1, nombre: "Camiseta básica", precio: 15, categoria: "Ropa", desbloqueadoPor: 0, stock: 2, stockOriginal: 2, imagen: "camisa.jpg" },
+            { id: 2, nombre: "Gorra", precio: 10, categoria: "Ropa", desbloqueadoPor: 0, stock: 3, stockOriginal: 3, imagen: "gorra.jpg" },
+            { id: 3, nombre: "Mochila", precio: 25, categoria: "Accesorios", desbloqueadoPor: 0, stock: 2, stockOriginal: 2, imagen: "mochila.jpg" },
+            { id: 4, nombre: "Auriculares", precio: 30, categoria: "Electrónicos", desbloqueadoPor: 0, stock: 1, stockOriginal: 1, imagen: "auriculares.jpg" },
+            { id: 5, nombre: "Agua mineral", precio: 2, categoria: "Comida", desbloqueadoPor: 0, stock: 5, stockOriginal: 5, imagen: "aguamineral.jpg" },
+            { id: 6, nombre: "Galletas", precio: 3, categoria: "Comida", desbloqueadoPor: 0, stock: 4, stockOriginal: 4, imagen: "galletas.jpg" },
+            { id: 7, nombre: "Pizza personal", precio: 12, categoria: "Comida", desbloqueadoPor: 1, stock: 3, stockOriginal: 3, imagen: "pizza.jpg" },
+            { id: 8, nombre: "Hamburguesa", precio: 8, categoria: "Comida", desbloqueadoPor: 1, stock: 3, stockOriginal: 3, imagen: "hamburguesa.jpg" },
+            { id: 9, nombre: "Pantalón jeans", precio: 35, categoria: "Ropa", desbloqueadoPor: 2, stock: 2, stockOriginal: 2, imagen: "jean.jpg" },
+            { id: 10, nombre: "Zapatos deportivos", precio: 45, categoria: "Ropa", desbloqueadoPor: 2, stock: 1, stockOriginal: 1, imagen: "zapatos.jpg" },
+            { id: 11, nombre: "Refresco", precio: 3, categoria: "Comida", desbloqueadoPor: 3, stock: 4, stockOriginal: 4, imagen: "refresco.jpg" },
+            { id: 12, nombre: "Sándwich", precio: 6, categoria: "Comida", desbloqueadoPor: 3, stock: 3, stockOriginal: 3, imagen: "Sándwich.jpg" },
+            { id: 13, nombre: "Chaqueta", precio: 50, categoria: "Ropa", desbloqueadoPor: 4, stock: 1, stockOriginal: 1, imagen: "chaqueta.jpg" },
+            { id: 14, nombre: "Libro de programación", precio: 20, categoria: "Educación", desbloqueadoPor: 4, stock: 2, stockOriginal: 2, imagen: "libroprogramacion.jpg" },
+            { id: 15, nombre: "Auriculares pro", precio: 60, categoria: "Electrónicos", desbloqueadoPor: 5, stock: 1, stockOriginal: 1, imagen: "auricularespro.jpg" },
+            { id: 16, nombre: "Combo comida completa", precio: 18, categoria: "Comida", desbloqueadoPor: 5, stock: 2, stockOriginal: 2, imagen: "combo.jpg" }
+        ];
+
+        // ===== ESTADO =====
+        let indicePregunta = 0;
+        let indiceOpcional = 0;
+        let carrito = [];
+        let seleccionados = [];
+        let totalGastado = 0;
+        let saldo = 300;
+        let opcionalesCompletadas = 0;
+        let tiendaDesbloqueada = false;
+
+        // ===== NAVEGACIÓN =====
+        function mostrarSeccion(nombre) {
+            // IF: verificar si la tienda está bloqueada
+            if (nombre === 'tienda' && !tiendaDesbloqueada) {
+                alert("Debes responder correctamente las 5 preguntas obligatorias para desbloquear la Mini Tienda.");
+                return;
+            }
+
+            // FOR: ocultar todas las secciones
+            const secciones = document.querySelectorAll('.seccion');
+            for (let i = 0; i < secciones.length; i++) {
+                secciones[i].classList.remove('activa');
+            }
+
+            // FOR: quitar clase activo de los botones del menú
+            const botones = document.querySelectorAll('.menu-nav button');
+            for (let i = 0; i < botones.length; i++) {
+                botones[i].classList.remove('activo');
+            }
+
+            // Mostrar la sección elegida
+            document.getElementById(nombre).classList.add('activa');
+            document.getElementById('btn-' + nombre).classList.add('activo');
+        }
+
+        // ===== PREGUNTAS OBLIGATORIAS =====
+        function mostrarPregunta() {
+            // IF: si ya terminó las obligatorias
+            if (indicePregunta >= 5) {
+                habilitarTienda();
+                return;
+            }
+
+            const pregunta = preguntas[indicePregunta];
+            document.getElementById("texto-pregunta").textContent = pregunta.texto;
+            document.getElementById("numero-pregunta").textContent = indicePregunta + 1;
+            document.getElementById("mensaje").textContent = "";
+
+            // Generar opciones con FOR
+            const contenedor = document.getElementById("opciones-container");
+            contenedor.innerHTML = "";
+
+            for (let i = 0; i < pregunta.opciones.length; i++) {
+                const op = pregunta.opciones[i];
+                const div = document.createElement("div");
+                div.className = "opcion";
+
+                // Escapar < y > para que se vean como texto
+                const textoSeguro = op.texto.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                div.innerHTML =
+                    '<input type="radio" name="respuesta" id="op-' + op.letra + '" value="' + op.letra + '">' +
+                    '<label for="op-' + op.letra + '"><strong>' + op.letra + ')</strong> ' + textoSeguro + '</label>';
+                
+                div.addEventListener("click", function() {
+                    document.getElementById("op-" + op.letra).checked = true;
+                    // FOR: quitar selección visual de todas
+                    const opcionesDiv = document.querySelectorAll("#opciones-container .opcion");
+                    for (let j = 0; j < opcionesDiv.length; j++) {
+                        opcionesDiv[j].classList.remove("seleccionada");
+                    }
+                    div.classList.add("seleccionada");
+                });
+
+                contenedor.appendChild(div);
+            }
+        }
+
+        function comprobarRespuesta() {
+            const seleccionada = document.querySelector('input[name="respuesta"]:checked');
+            const mensaje = document.getElementById("mensaje");
+
+            // IF: no eligió ninguna opción
+            if (!seleccionada) {
+                mensaje.textContent = "Por favor selecciona una opción (A, B o C).";
+                mensaje.className = "mensaje incorrecto";
+                return;
+            }
+
+            const respuestaUsuario = seleccionada.value;
+            const respuestaCorrecta = preguntas[indicePregunta].correcta;
+
+            // IF: respuesta correcta o incorrecta
+            if (respuestaUsuario === respuestaCorrecta) {
+                mensaje.textContent = " ¡Correcto!";
+                mensaje.className = "mensaje correcto";
+                indicePregunta++;
+
+                setTimeout(function() {
+                    // IF: terminó las 5 obligatorias
+                    if (indicePregunta >= 5) {
+                        habilitarTienda();
+                    } else {
+                        mostrarPregunta();
+                    }
+                }, 900);
+            } else {
+                mensaje.textContent = " Incorrecto. Inténtalo de nuevo.";
+                mensaje.className = "mensaje incorrecto";
+                // FOR: desmarcar radios
+                const radios = document.querySelectorAll('input[name="respuesta"]');
+                for (let i = 0; i < radios.length; i++) {
+                    radios[i].checked = false;
+                }
+                // FOR: quitar estilo seleccionado
+                const opcionesDiv = document.querySelectorAll("#opciones-container .opcion");
+                for (let i = 0; i < opcionesDiv.length; i++) {
+                    opcionesDiv[i].classList.remove("seleccionada");
+                }
+            }
+        }
+
+        function habilitarTienda() {
+            tiendaDesbloqueada = true;
+            document.getElementById("btn-tienda").disabled = false;
+            document.getElementById("zona-preguntas").classList.add("oculto");
+            document.getElementById("zona-opcionales").classList.remove("oculto");
+            document.getElementById("instruccion").textContent = "¡Felicidades! Has ganado $300. Ahora puedes ir a la Mini Tienda o responder preguntas opcionales para ganar más dinero (+$30 c/u) y desbloquear más productos.";
+
+            mostrarOpcional();
+            renderizarProductos();
+            actualizarSeleccionados();
+            actualizarCarrito();
+
+            // Cambiar automáticamente a la tienda
+            setTimeout(function() {
+                mostrarSeccion('tienda');
+            }, 600);
+        }
+
+        // ===== PREGUNTAS OPCIONALES =====
+        function mostrarOpcional() {
+            // IF: ya terminó todas las opcionales
+            if (indiceOpcional >= 5) {
+                document.getElementById("caja-pregunta-opcional").style.display = "none";
+                document.getElementById("contador-opcional").style.display = "none";
+                document.getElementById("mensaje-final-opcional").style.display = "block";
+                return;
+            }
+
+            document.getElementById("caja-pregunta-opcional").style.display = "block";
+            document.getElementById("contador-opcional").style.display = "block";
+            document.getElementById("mensaje-final-opcional").style.display = "none";
+
+            const pregunta = preguntas[5 + indiceOpcional];
+            document.getElementById("texto-opcional").textContent = pregunta.texto;
+            document.getElementById("numero-opcional").textContent = indiceOpcional + 1;
+            document.getElementById("mensaje-opcional").textContent = "";
+
+            // Generar opciones con FOR
+            const contenedor = document.getElementById("opciones-opcional");
+            contenedor.innerHTML = "";
+
+            for (let i = 0; i < pregunta.opciones.length; i++) {
+                const op = pregunta.opciones[i];
+                const div = document.createElement("div");
+                div.className = "opcion";
+
+                // Escapar < y > para que se vean como texto
+                const textoSeguro = op.texto.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                div.innerHTML =
+                    '<input type="radio" name="respuesta-opcional" id="op-opc-' + op.letra + '" value="' + op.letra + '">' +
+                    '<label for="op-opc-' + op.letra + '"><strong>' + op.letra + ')</strong> ' + textoSeguro + '</label>';
+                
+                div.addEventListener("click", function() {
+                    document.getElementById("op-opc-" + op.letra).checked = true;
+                    const opcionesDiv = document.querySelectorAll("#opciones-opcional .opcion");
+                    for (let j = 0; j < opcionesDiv.length; j++) {
+                        opcionesDiv[j].classList.remove("seleccionada");
+                    }
+                    div.classList.add("seleccionada");
+                });
+
+                contenedor.appendChild(div);
+            }
+        }
+
+        function comprobarOpcional() {
+            const seleccionada = document.querySelector('input[name="respuesta-opcional"]:checked');
+            const mensaje = document.getElementById("mensaje-opcional");
+
+            // IF: no seleccionó opción
+            if (!seleccionada) {
+                mensaje.textContent = "Por favor selecciona una opción (A, B o C).";
+                mensaje.className = "mensaje incorrecto";
+                return;
+            }
+
+            const respuestaUsuario = seleccionada.value;
+            const respuestaCorrecta = preguntas[5 + indiceOpcional].correcta;
+
+            // IF: correcta o incorrecta
+            if (respuestaUsuario === respuestaCorrecta) {
+                // Recompensa: +$30 por cada opcional correcta
+                saldo = saldo + 30;
+                document.getElementById("saldo").textContent = saldo;
+
+                mensaje.textContent = " ¡Correcto! +$30 de saldo. Nuevos productos desbloqueados.";
+                mensaje.className = "mensaje correcto";
+                indiceOpcional++;
+                opcionalesCompletadas++;
+
+                setTimeout(function() {
+                    mostrarOpcional();
+                    renderizarProductos();
+                }, 1000);
+            } else {
+                mensaje.textContent = " Incorrecto. Inténtalo de nuevo.";
+                mensaje.className = "mensaje incorrecto";
+                // FOR: desmarcar
+                const radios = document.querySelectorAll('input[name="respuesta-opcional"]');
+                for (let i = 0; i < radios.length; i++) {
+                    radios[i].checked = false;
+                }
+                const opcionesDiv = document.querySelectorAll("#opciones-opcional .opcion");
+                for (let i = 0; i < opcionesDiv.length; i++) {
+                    opcionesDiv[i].classList.remove("seleccionada");
+                }
+            }
+        }
+
+        // ===== PRODUCTOS Y COMPRA =====
+        function renderizarProductos() {
+            const contenedor = document.getElementById("lista-productos");
+            contenedor.innerHTML = "";
+
+            // FOR: recorrer todos los productos
+            for (let i = 0; i < productos.length; i++) {
+                const producto = productos[i];
+                // IF: está desbloqueado o no
+                const estaDesbloqueado = producto.desbloqueadoPor === 0 || producto.desbloqueadoPor <= opcionalesCompletadas;
+
+                const div = document.createElement("div");
+                div.className = "producto" + (estaDesbloqueado ? "" : " bloqueado");
+
+                let textoStock = producto.stock > 0 ? "(disponibles " + producto.stock + ")" : "(agotado)";
+                let claseStock = producto.stock > 0 ? "stock" : "stock agotado";
+
+                // IF: producto desbloqueado
+                if (estaDesbloqueado) {
+                    const deshabilitado = producto.stock <= 0 ? "disabled" : "";
+                    const textoBoton = producto.stock > 0 ? "Seleccionar" : "Agotado";
+
+                    div.innerHTML =
+                        "<div class='producto-info'>" +
+                            "<img src='" + producto.imagen + "' alt='" + producto.nombre + "'>" +
+                            "<div>" +
+                                "<strong>" + producto.nombre + "</strong>" +
+                                "<div class='categoria'>" + producto.categoria + "</div>" +
+                                "<span>$" + producto.precio + "</span>" +
+                                "<div class='" + claseStock + "'>" + textoStock + "</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<button onclick='seleccionarProducto(" + producto.id + ")' " + deshabilitado + ">" + textoBoton + "</button>";
+                } else {
+                    div.innerHTML =
+                        "<div class='producto-info'>" +
+                            "<img src='" + producto.imagen + "' alt='" + producto.nombre + "'>" +
+                            "<div>" +
+                                "<strong>" + producto.nombre + "</strong>" +
+                                "<div class='categoria'>" + producto.categoria + "</div>" +
+                                "<span>$" + producto.precio + "</span>" +
+                                "<div class='bloqueado-texto'>Responde la pregunta opcional " + producto.desbloqueadoPor + " para desbloquear</div>" +
+                            "</div>" +
+                        "</div>" +
+                        "<button disabled>Bloqueado</button>";
+                }
+
+                contenedor.appendChild(div);
+            }
+        }
+
+        function seleccionarProducto(idProducto) {
+            let producto = null;
+
+            // FOR: buscar el producto por id
+            for (let i = 0; i < productos.length; i++) {
+                if (productos[i].id === idProducto) {
+                    producto = productos[i];
+                    break;
+                }
+            }
+
+            // IF: no encontró el producto
+            if (!producto) return;
+
+            // IF: no hay stock
+            if (producto.stock <= 0) {
+                alert("Este producto ya no tiene stock disponible.");
+                return;
+            }
+
+            // Contar cuántas unidades ya están seleccionadas (FOR)
+            let yaSeleccionados = 0;
+            for (let i = 0; i < seleccionados.length; i++) {
+                if (seleccionados[i].id === idProducto) {
+                    yaSeleccionados++;
+                }
+            }
+
+            // IF: ya seleccionó el máximo de stock
+            if (yaSeleccionados >= producto.stock) {
+                alert("No puedes seleccionar más unidades de este producto (stock agotado en selección).");
+                return;
+            }
+
+            // Agregar a seleccionados (NO se descuenta dinero todavía)
+            seleccionados.push({
+                id: producto.id,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                categoria: producto.categoria
+            });
+            actualizarSeleccionados();
+            document.getElementById("mensaje-compra").textContent = "";
+        }
+
+        function quitarSeleccionado(indice) {
+            seleccionados.splice(indice, 1);
+            actualizarSeleccionados();
+            document.getElementById("mensaje-compra").textContent = "";
+        }
+
+        function actualizarSeleccionados() {
+            const lista = document.getElementById("lista-seleccionados");
+            const btnComprar = document.getElementById("btn-comprar");
+            lista.innerHTML = "";
+
+            // IF: no hay seleccionados
+            if (seleccionados.length === 0) {
+                lista.innerHTML = "<li style='color:#64748b;'>Ningún producto seleccionado</li>";
+                btnComprar.disabled = true;
+            } else {
+                let totalSeleccion = 0;
+
+                // FOR: mostrar cada seleccionado
+                for (let i = 0; i < seleccionados.length; i++) {
+                    const item = seleccionados[i];
+                    totalSeleccion = totalSeleccion + item.precio;
+                    const li = document.createElement("li");
+                    li.innerHTML =
+                        "<span>" + item.nombre + " — $" + item.precio + "</span>" +
+                        "<button class='btn-quitar' onclick='quitarSeleccionado(" + i + ")'>Quitar</button>";
+                    lista.appendChild(li);
+                }
+
+                // Mostrar total de la selección
+                const liTotal = document.createElement("li");
+                liTotal.style.fontWeight = "700";
+                liTotal.style.color = "#b45309";
+                liTotal.innerHTML = "<span>Total a pagar:</span><span>$" + totalSeleccion + "</span>";
+                lista.appendChild(liTotal);
+
+                btnComprar.disabled = false;
+            }
+        }
+
+        function comprarSeleccionados() {
+            const mensaje = document.getElementById("mensaje-compra");
+
+            // IF: no hay productos seleccionados
+            if (seleccionados.length === 0) {
+                mensaje.textContent = "No hay productos seleccionados.";
+                mensaje.className = "mensaje-compra incorrecto";
+                return;
+            }
+
+            // Calcular total con FOR
+            let totalSeleccion = 0;
+            for (let i = 0; i < seleccionados.length; i++) {
+                totalSeleccion = totalSeleccion + seleccionados[i].precio;
+            }
+
+            // IF: no alcanza el saldo
+            if (saldo < totalSeleccion) {
+                mensaje.textContent = " No tienes suficiente saldo. Ya no puedes comprar estos productos.";
+                mensaje.className = "mensaje-compra incorrecto";
+                return;
+            }
+
+            // Verificar stock con FOR e IF
+            for (let i = 0; i < seleccionados.length; i++) {
+                let prod = null;
+                for (let j = 0; j < productos.length; j++) {
+                    if (productos[j].id === seleccionados[i].id) {
+                        prod = productos[j];
+                        break;
+                    }
+                }
+                // IF: no hay stock
+                if (!prod || prod.stock <= 0) {
+                    mensaje.textContent = " Alguno de los productos ya no tiene stock.";
+                    mensaje.className = "mensaje-compra incorrecto";
+                    return;
+                }
+            }
+
+            // Realizar la compra con FOR
+            for (let i = 0; i < seleccionados.length; i++) {
+                const item = seleccionados[i];
+                for (let j = 0; j < productos.length; j++) {
+                    if (productos[j].id === item.id) {
+                        productos[j].stock = productos[j].stock - 1;
+                        saldo = saldo - item.precio;
+                        totalGastado = totalGastado + item.precio;
+                        carrito.push(item);
+                        break;
+                    }
+                }
+            }
+
+            // Limpiar selección
+            seleccionados = [];
+            actualizarSeleccionados();
+            document.getElementById("saldo").textContent = saldo;
+            actualizarCarrito();
+            renderizarProductos();
+
+            mensaje.textContent = " ¡Compra realizada con éxito!";
+            mensaje.className = "mensaje-compra correcto";
+
+            // IF: se quedó sin dinero
+            if (saldo === 0) {
+                setTimeout(function() {
+                    mensaje.textContent = " Te has quedado sin saldo. Ya no puedes comprar más productos.";
+                    mensaje.className = "mensaje-compra incorrecto";
+                }, 1500);
+            }
+        }
+
+        function actualizarCarrito() {
+            const lista = document.getElementById("lista-carrito");
+            lista.innerHTML = "";
+
+            // IF: carrito vacío
+            if (carrito.length === 0) {
+                lista.innerHTML = "<li style='color:#64748b;'>El carrito está vacío</li>";
+            } else {
+                // FOR: mostrar cada item del carrito
+                for (let i = 0; i < carrito.length; i++) {
+                    const item = carrito[i];
+                    const li = document.createElement("li");
+                    li.innerHTML = "<span>" + item.nombre + "</span><span>$" + item.precio + "</span>";
+                    lista.appendChild(li);
+                }
+            }
+
+            document.getElementById("total").textContent = totalGastado;
+        }
+
+        // ===== INICIO =====
+        mostrarPregunta();
+    </script>
+</body>
+</html>
